@@ -4,7 +4,9 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
-    "git", "clone", "--filter=blob:none",
+    "git",
+    "clone",
+    "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable",
     lazypath,
@@ -39,6 +41,9 @@ vim.keymap.set("n", "<leader>fg", function()
   require("telescope.builtin").live_grep()
 end, { desc = "Telescope live grep" })
 
+vim.keymap.set("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle floating terminal" })
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+
 ------------------------------------------------------------
 -- Plugins
 ------------------------------------------------------------
@@ -56,59 +61,40 @@ require("lazy").setup({
           prompt_prefix = "> ",
           selection_caret = "> ",
           path_display = { "smart" },
-        }
+        },
       })
-    end
+    end,
   },
 
   ----------------------------------------------------------
-  -- Treesitter
-  ----------------------------------------------------------
-
-  ----------------------------------------------------------
-  -- LSP
-  ----------------------------------------------------------
-  
-  ----------------------------------------------------------
-  -- Autocomplete
+  -- Floating Terminal
   ----------------------------------------------------------
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "L3MON4D3/LuaSnip",
-    },
+    "akinsho/toggleterm.nvim",
+    version = "*",
     config = function()
-      local cmp = require("cmp")
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
+      require("toggleterm").setup({
+        open_mapping = [[<c-\>]],
+        direction = "float",
+        float_opts = {
+          border = "rounded",
         },
-        mapping = cmp.mapping.preset.insert({
-          ["<Tab>"] = cmp.mapping.select_next_item(),
-          ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = {
-          { name = "nvim_lsp" },
-          { name = "buffer" },
-        },
+        shade_terminals = true,
+        start_in_insert = true,
+        persist_size = true,
       })
-    end
+    end,
   },
 
   ----------------------------------------------------------
   -- Tsoding Color Scheme (Lua recreation)
   ----------------------------------------------------------
-	{
-	    "ring0-rootkit/ring0-dark.nvim",
-	    priority = 1000, -- Make sure to load this before all the other start plugins.
-	    init = function()
-		vim.cmd.colorscheme("ring0dark")
-	    end,
-	},
-})
+  {
+    "ring0-rootkit/ring0-dark.nvim",
+    priority = 1000,
+    init = function()
+      vim.cmd.colorscheme("ring0dark")
+    end,
+  },
 
+})
