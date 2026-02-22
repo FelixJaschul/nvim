@@ -29,14 +29,51 @@ vim.g.maplocalleader = " "
 ------------------------------------------------------------
 -- Keymaps
 ------------------------------------------------------------
-vim.keymap.set("n","<Space><Space>", function()
+
+-- Helper for opening Telescope files in splits
+local function open_in(split)
+  return function()
+    -- require Telescope inside the function to avoid preload errors
+    local tb = require("telescope.builtin")
+    tb.find_files({
+      attach_mappings = function(prompt_bufnr, map)
+        local actions = require("telescope.actions")
+        local action_state = require("telescope.actions.state")
+        local cmd = split == "v" and "vsplit " or split == "h" and "split " or ""
+
+        map("i", "<CR>", function()
+          local sel = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          vim.cmd(cmd .. sel.path)
+        end)
+        map("n", "<CR>", function()
+          local sel = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          vim.cmd(cmd .. sel.path)
+        end)
+
+        return true
+      end,
+    })
+  end
+end
+
+-- Normal keymaps
+vim.keymap.set("n", "<Space><Space>", function()
   require("telescope.builtin").find_files()
-end)
-vim.keymap.set("n","<leader>fg", function()
+end) -- open in current window
+
+vim.keymap.set("n", "vv", open_in("v"))              -- vertical split
+vim.keymap.set("n", "hh", open_in("h"))              -- horizontal split
+vim.keymap.set("n", "<Space><Enter>", function()
   require("telescope.builtin").live_grep()
 end)
-vim.keymap.set("n","<leader>tt", "<cmd>ToggleTerm<cr>")
-vim.keymap.set("t","<Esc>", [[<C-\><C-n>]])
+vim.keymap.set("n", "<Space>tt", "<cmd>ToggleTerm<cr>")
+
+-- Terminal keymap: type "exit" to close shell
+vim.keymap.set("t", "<Esc>", function()
+  vim.api.nvim_feedkeys("exit\n", "t", false)
+end)
 
 ------------------------------------------------------------
 -- Plugins
