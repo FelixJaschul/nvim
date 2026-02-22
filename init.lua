@@ -15,7 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 -- Basic Options
 ------------------------------------------------------------
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = true 
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
@@ -25,6 +25,10 @@ vim.opt.signcolumn = "yes"
 vim.opt.updatetime = 300
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.opt.wrap = false
+vim.opt.linebreak = false
+vim.opt.sidescroll = 1
+vim.opt.sidescrolloff = 1
 
 ------------------------------------------------------------
 -- Keymaps
@@ -80,6 +84,21 @@ end)
 ------------------------------------------------------------
 require("lazy").setup({
   --------------------------------------------------------
+  -- Animation
+  --------------------------------------------------------
+  {
+    "sphamba/smear-cursor.nvim",
+    event = "VeryLazy",
+    opts = {
+      smear_between_buffers = true,
+      smear_between_neighbor_lines = true,
+      scroll_buffer_space = true,
+      legacy_computing_symbols_support = false,
+      smear_insert_mode = false,
+    },
+  },
+
+  --------------------------------------------------------
   -- Telescope
   --------------------------------------------------------
   {
@@ -120,7 +139,7 @@ require("lazy").setup({
   },
 
   --------------------------------------------------------
-  -- Gruvbox-baby with TS/LSP support
+  -- Themes
   --------------------------------------------------------
   {
     -- 1. "morhetz/gruvbox",
