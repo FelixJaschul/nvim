@@ -67,8 +67,8 @@ vim.keymap.set("n", "<Space><Space>", function()
   require("telescope.builtin").find_files()
 end) -- open in current window
 
-vim.keymap.set("n", "vv", open_in("v"))              -- vertical split
-vim.keymap.set("n", "hh", open_in("h"))              -- horizontal split
+vim.keymap.set("n", "hh", open_in("v"))              -- vertical split
+vim.keymap.set("n", "vv", open_in("h"))              -- horizontal split
 vim.keymap.set("n", "<Space><Enter>", function()
   require("telescope.builtin").live_grep()
 end)
